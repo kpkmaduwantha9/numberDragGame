@@ -1,3 +1,4 @@
+import 'package:dragnumbershapes/21game.dart';
 import 'package:dragnumbershapes/22game.dart';
 import 'package:dragnumbershapes/41game.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,7 @@ class HomeScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => GameScreen2()),
                 );
               },
-              child: Text("Go to GameScreen2"),
+              child: Text("4+1="),
             ),
             SizedBox(height: 20), // Adds spacing between buttons
             ElevatedButton(
@@ -46,17 +47,17 @@ class HomeScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => GameScreen()),
                 );
               },
-              child: Text("Go to GameScreen"),
+              child: Text("2+2="),
             ),
             SizedBox(height: 20), // Adds spacing between buttons
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => GameScreen()),
+                  MaterialPageRoute(builder: (context) => GameScreen3()),
                 );
               },
-              child: Text("Go to GameScreen"),
+              child: Text("2+1="),
             ),
           ],
         ),
