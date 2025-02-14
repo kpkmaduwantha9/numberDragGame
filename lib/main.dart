@@ -74,21 +74,21 @@ class _GameScreenState extends State<GameScreen> {
             children: [
               // Custom Curved Banner
               Container(
-                height: 150,
+                height: 230,
                 child: CustomPaint(
                   painter: CurvedTopPainter(),
                   child: Center(
                     child: Text(
                       "Drag the number",
                       style: TextStyle(
-                          fontSize: 28,
+                          fontSize: 40,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 80),
+              SizedBox(height: 10),
 
               // Draggable Number Shapes (Fixed 2x2 Layout)
               if (!shapePlaced)
