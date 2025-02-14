@@ -31,7 +31,7 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void initState() {
     super.initState();
-    _confettiController = ConfettiController(duration: Duration(seconds: 3));
+    _confettiController = ConfettiController(duration: Duration(seconds: 5));
   }
 
   @override
@@ -71,7 +71,7 @@ class _GameScreenState extends State<GameScreen> {
     double shortestSide = MediaQuery.of(context).size.shortestSide;
     bool isTablet = shortestSide > 600; // Detects if it's a tablet
 
-    double shapeSize = screenWidth * 0.2;
+    double shapeSize = screenWidth * 0.25;
     double fontSize = screenWidth * 0.06;
     double spacing = screenHeight * 0.02;
 
