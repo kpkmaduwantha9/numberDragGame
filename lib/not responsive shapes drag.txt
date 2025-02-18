@@ -78,134 +78,109 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    double shapeSize = screenWidth * 0.2;
+    double fontSize = screenWidth * 0.06;
+    double spacing = screenHeight * 0.02;
+
     return Scaffold(
       backgroundColor: Colors.amber.shade100,
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          double screenWidth = constraints.maxWidth;
-          double screenHeight = constraints.maxHeight;
-          double shapeSize = screenWidth * 0.2;
-          double fontSize = screenWidth * 0.06;
-          double spacing = screenHeight * 0.02;
-
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                _buildHeader(fontSize, screenHeight),
-                SizedBox(height: spacing),
-                _buildDropTargets(shapeSize, screenWidth),
-                SizedBox(height: spacing * 2),
-                _buildDraggableShapes(shapeSize, screenWidth),
-                SizedBox(height: spacing * 2),
-                _buildResultUI(fontSize, spacing),
-                _buildConfetti(),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildHeader(double fontSize, double screenHeight) {
-    return Container(
-      height: screenHeight * 0.25,
-      width: double.infinity,
-      child: CustomPaint(
-        painter: CurvedTopPainter(),
-        child: Center(
-          child: Text(
-            "Match the Shapes",
-            style: TextStyle(
-              fontSize: fontSize * 1.5,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDropTargets(double shapeSize, double screenWidth) {
-    return Wrap(
-      spacing: screenWidth * 0.05,
-      runSpacing: shapeSize * 0.2,
-      alignment: WrapAlignment.center,
-      children: ShapeType.values
-          .map((shape) => dropTarget(shape, shapeSize))
-          .toList(),
-    );
-  }
-
-  Widget _buildDraggableShapes(double shapeSize, double screenWidth) {
-    return placedShapes.values.every((isPlaced) => isPlaced)
-        ? SizedBox.shrink()
-        : Wrap(
-            spacing: screenWidth * 0.05,
-            runSpacing: shapeSize * 0.2,
-            alignment: WrapAlignment.center,
-            children: ShapeType.values.map((shape) {
-              bool isPlaced = placedShapes[shape] ?? false;
-              Color color =
-                  isPlaced ? Colors.orange.withOpacity(0.2) : Colors.orange;
-              return draggableShape(shape, color, shapeSize);
-            }).toList(),
-          );
-  }
-
-  Widget _buildResultUI(double fontSize, double spacing) {
-    if (placedShapes.values.every((isPlaced) => isPlaced)) {
-      return Column(
+      body: Column(
         children: [
-          Text(
-            "🎉 Correct! 🎉",
-            style: TextStyle(
-              fontSize: fontSize * 2,
-              fontWeight: FontWeight.bold,
-              color: Colors.green,
+          Container(
+            height: screenHeight * 0.25,
+            width: double.infinity,
+            child: CustomPaint(
+              painter: CurvedTopPainter(),
+              child: Center(
+                child: Text(
+                  "Match the Shapes",
+                  style: TextStyle(
+                    fontSize: fontSize * 1.5,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ),
           ),
           SizedBox(height: spacing),
-          ElevatedButton(
-            onPressed: resetGame,
-            child: Text("Next", style: TextStyle(fontSize: fontSize * 1)),
-          ),
-        ],
-      );
-    } else if (isWrong) {
-      return Column(
-        children: [
-          Text(
-            "❌ Try Again!",
-            style: TextStyle(
-              fontSize: fontSize * 1,
-              fontWeight: FontWeight.bold,
-              color: Colors.red,
-            ),
+          Wrap(
+            spacing: screenWidth * 0.05,
+            runSpacing: spacing,
+            alignment: WrapAlignment.center,
+            children: ShapeType.values
+                .map((shape) => dropTarget(shape, shapeSize))
+                .toList(),
           ),
           SizedBox(height: spacing * 2),
-          ElevatedButton(
-            onPressed: resetWrong,
-            child:
-                Text("Try Again", style: TextStyle(fontSize: fontSize * 0.8)),
+          if (!placedShapes.values.every((isPlaced) => isPlaced))
+            Wrap(
+              spacing: screenWidth * 0.05,
+              runSpacing: spacing,
+              alignment: WrapAlignment.center,
+              children: [
+                ShapeType.circle,
+                ShapeType.triangle,
+                ShapeType.pentagon,
+                ShapeType.hexagon,
+                ShapeType.rectangle,
+              ].map((shape) {
+                bool isPlaced = placedShapes[shape] ?? false;
+                Color color =
+                    isPlaced ? Colors.orange.withOpacity(0.2) : Colors.orange;
+                return draggableShape(shape, color, shapeSize);
+              }).toList(),
+            ),
+          SizedBox(height: spacing * 2),
+          if (placedShapes.values.every((isPlaced) => isPlaced))
+            Column(
+              children: [
+                Text(
+                  "🎉 Correct! 🎉",
+                  style: TextStyle(
+                      fontSize: fontSize * 2,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green),
+                ),
+                SizedBox(height: spacing),
+                ElevatedButton(
+                  onPressed: resetGame,
+                  child: Text("Next", style: TextStyle(fontSize: fontSize * 1)),
+                ),
+              ],
+            )
+          else if (isWrong)
+            Column(
+              children: [
+                Text(
+                  "❌ Try Again!",
+                  style: TextStyle(
+                      fontSize: fontSize * 1,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red),
+                ),
+                SizedBox(height: spacing * 2),
+                ElevatedButton(
+                  onPressed: resetWrong,
+                  child: Text("Try Again",
+                      style: TextStyle(fontSize: fontSize * 0.8)),
+                ),
+              ],
+            ),
+          ConfettiWidget(
+            confettiController: _confettiController,
+            blastDirection: pi / 2,
+            emissionFrequency: 0.2,
+            shouldLoop: false,
+            numberOfParticles: 100,
+            blastDirectionality: BlastDirectionality.explosive,
+            gravity: 0.1,
+            colors: [Colors.red, Colors.blue, Colors.green, Colors.yellow],
           ),
         ],
-      );
-    }
-    return SizedBox.shrink();
-  }
-
-  Widget _buildConfetti() {
-    return ConfettiWidget(
-      confettiController: _confettiController,
-      blastDirection: pi / 2,
-      emissionFrequency: 0.2,
-      shouldLoop: false,
-      numberOfParticles: 100,
-      blastDirectionality: BlastDirectionality.explosive,
-      gravity: 0.1,
-      colors: [Colors.red, Colors.blue, Colors.green, Colors.yellow],
+      ),
     );
   }
 
@@ -250,6 +225,7 @@ class _GameScreenState extends State<GameScreen> {
   }
 }
 
+// ✅ **Added Back the Missing CurvedTopPainter**
 class CurvedTopPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -294,7 +270,7 @@ class PolygonPainter extends CustomPainter {
           ShapeType.triangle: 3,
           ShapeType.rectangle: 4,
         }[shapeType] ??
-        4; // Default to 4 sides if shape is not found
+        4;
 
     return Path()
       ..addPolygon(
