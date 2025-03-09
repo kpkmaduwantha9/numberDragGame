@@ -1,6 +1,7 @@
 import 'package:dragnumbershapes/21game.dart';
 import 'package:dragnumbershapes/22game.dart';
 import 'package:dragnumbershapes/41game.dart';
+import 'package:dragnumbershapes/shapes_drag.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -58,6 +59,16 @@ class HomeScreen extends StatelessWidget {
                 );
               },
               child: Text("2+1="),
+            ),
+            SizedBox(height: 20), // Adds spacing between buttons
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GameScreen4()),
+                );
+              },
+              child: Text("shapes drag"),
             ),
           ],
         ),

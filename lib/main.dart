@@ -1,6 +1,7 @@
 import 'package:dragnumbershapes/21game.dart';
 import 'package:dragnumbershapes/22game.dart';
 import 'package:dragnumbershapes/41game.dart';
+import 'package:dragnumbershapes/RGB_color_match1.dart';
 import 'package:dragnumbershapes/shapes_drag.dart';
 import 'package:flutter/material.dart';
 
@@ -69,6 +70,16 @@ class HomeScreen extends StatelessWidget {
                 );
               },
               child: Text("shapes drag"),
+            ),
+            SizedBox(height: 20), // Adds spacing between buttons
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GameScreen5()),
+                );
+              },
+              child: Text("RGB color match"),
             ),
           ],
         ),
